@@ -126,6 +126,10 @@ where
 #[derive(Copy, Clone)]
 #[must_use = "builder methods take config by value and thus must be reassigned to variable"]
 pub struct ColoredLevelConfig {
+    /// The color to color logs with the [`Output`] level.
+    ///
+    /// [`Output`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Output
+    pub output: Color,
     /// The color to color logs with the [`Error`] level.
     ///
     /// [`Error`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Error
@@ -165,6 +169,17 @@ impl ColoredLevelConfig {
     #[inline]
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// Overrides the [`Output`] level color with the given color.
+    ///
+    /// The default color is [`Color::White`].
+    ///
+    /// [`Output`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Output
+    /// [`Color::Red`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.Red
+    pub fn output(mut self, output: Color) -> Self {
+        self.output = output;
+        self
     }
 
     /// Overrides the [`Error`] level color with the given color.
@@ -260,6 +275,7 @@ impl ColoredLevelConfig {
     /// Retrieves the color that a log level should be colored as.
     pub fn get_color(&self, level: &Level) -> Color {
         match *level {
+            Level::Output => self.output,
             Level::Error => self.error,
             Level::Warn => self.warn,
             Level::Info => self.info,
@@ -274,6 +290,7 @@ impl ColoredLevelConfig {
 impl Default for ColoredLevelConfig {
     /// Retrieves the default configuration. This has:
     ///
+    /// - [`Output`] as [`Color::White`]
     /// - [`Error`] as [`Color::Red`]
     /// - [`Warn`] as [`Color::Yellow`]
     /// - [`Info`] as [`Color::White`]
@@ -282,6 +299,7 @@ impl Default for ColoredLevelConfig {
     /// - [`Detail`] as [`Color::White`]
     /// - [`Shell`] as [`Color::White`]
     ///
+    /// [`Output`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Output
     /// [`Error`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Error
     /// [`Warn`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Warn
     /// [`Info`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Info
@@ -294,6 +312,7 @@ impl Default for ColoredLevelConfig {
     /// [`Color::Red`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.Red
     fn default() -> Self {
         ColoredLevelConfig {
+            output: Color::White,
             error: Color::Red,
             warn: Color::Yellow,
             debug: Color::White,
