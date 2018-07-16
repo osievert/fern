@@ -21,7 +21,7 @@ appveyor = { repository = "daboross/fern" }
 coveralls = { repository = "daboross/fern" }
 
 [dependencies]
-log = { version = "0.4", features = ["std"] }
+log = { version = "0.4.3", features = ["std"] }
 colored = { version = "1.5", optional = true }
 syslog3 = { version = "3", optional = true }
 syslog = { version = "4", optional = true }
@@ -60,3 +60,6 @@ name = "meta-logging"
 
 [package.metadata.docs.rs]
 all-features = true
+
+[replace]
+"log:0.4.3" = { git = 'https://github.com/osievert/log' }

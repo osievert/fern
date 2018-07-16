@@ -455,10 +455,11 @@ macro_rules! send_syslog {
     ($logger:expr, $level:expr, $message:expr) => {
         use log::Level;
         match $level {
+            Level::Output => $logger.err($message)?,
             Level::Error => $logger.err($message)?,
             Level::Warn => $logger.warning($message)?,
             Level::Info => $logger.info($message)?,
-            Level::Debug | Level::Trace => $logger.debug($message)?,
+            Level::Debug | Level::Trace | Level::Detail || Level::Shell => $logger.debug($message)?,
         }
     };
 }

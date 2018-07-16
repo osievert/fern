@@ -59,7 +59,7 @@ use {Syslog4Rfc3164Logger, Syslog4Rfc5424Logger};
 ///     .chain(
 ///         fern::Dispatch::new()
 ///             // output all messages
-///             .level(log::LevelFilter::Trace)
+///             .level(log::LevelFilter::Shell)
 ///             // except for hyper, in that case only show info messages
 ///             .level_for("hyper", log::LevelFilter::Info)
 ///             // `log_file(x)` equates to
@@ -122,7 +122,7 @@ impl Dispatch {
         Dispatch {
             format: None,
             children: Vec::new(),
-            default_level: log::LevelFilter::Trace,
+            default_level: log::LevelFilter::Shell,
             levels: Vec::new(),
             filters: Vec::new(),
         }
@@ -202,10 +202,10 @@ impl Dispatch {
     /// All messages filtered will be discarded if less severe than the given
     /// level.
     ///
-    /// Default level is [`LevelFilter::Trace`].
+    /// Default level is [`LevelFilter::Shell`].
     ///
     /// [`Dispatch::level_for`]: #method.level_for
-    /// [`LevelFilter::Trace`]: https://docs.rs/log/0.4/log/enum.LevelFilter.html#variant.Trace
+    /// [`LevelFilter::Shell`]: https://docs.rs/log/0.4/log/enum.LevelFilter.html#variant.Shell
     ///
     /// Example usage:
     ///
@@ -250,7 +250,7 @@ impl Dispatch {
     /// #
     /// # fn main() {
     /// fern::Dispatch::new()
-    ///     .level(log::LevelFilter::Trace)
+    ///     .level(log::LevelFilter::Shell)
     ///     .level_for("hyper", log::LevelFilter::Info)
     ///     # .into_log();
     /// # }
@@ -431,35 +431,35 @@ impl Dispatch {
             .into_iter()
             .flat_map(|child| match child {
                 OutputInner::Stdout { stream, line_sep } => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Stdout(log_impl::Stdout {
                         stream: stream,
                         line_sep: line_sep,
                     }))
                 }
                 OutputInner::Stderr { stream, line_sep } => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Stderr(log_impl::Stderr {
                         stream: stream,
                         line_sep: line_sep,
                     }))
                 }
                 OutputInner::File { stream, line_sep } => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::File(log_impl::File {
                         stream: Mutex::new(io::BufWriter::new(stream)),
                         line_sep: line_sep,
                     }))
                 }
                 OutputInner::Writer { stream, line_sep } => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Writer(log_impl::Writer {
                         stream: Mutex::new(stream),
                         line_sep: line_sep,
                     }))
                 }
                 OutputInner::Sender { stream, line_sep } => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Sender(log_impl::Sender {
                         stream: Mutex::new(stream),
                         line_sep: line_sep,
@@ -467,26 +467,26 @@ impl Dispatch {
                 }
                 #[cfg(feature = "syslog-3")]
                 OutputInner::Syslog3(log) => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Syslog3(log_impl::Syslog3 { inner: log }))
                 }
                 #[cfg(feature = "syslog-4")]
                 OutputInner::Syslog4Rfc3164(logger) => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Syslog4Rfc3164(log_impl::Syslog4Rfc3164 {
                         inner: Mutex::new(logger),
                     }))
                 }
                 #[cfg(feature = "syslog-4")]
                 OutputInner::Syslog4Rfc5424 { logger, transform } => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Syslog4Rfc5424(log_impl::Syslog4Rfc5424 {
                         inner: Mutex::new(logger),
                         transform,
                     }))
                 }
                 OutputInner::Panic => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::Panic(log_impl::Panic))
                 }
                 OutputInner::Dispatch(child_dispatch) => {
@@ -512,11 +512,11 @@ impl Dispatch {
                     }
                 }
                 OutputInner::OtherBoxed(child_log) => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::OtherBoxed(child_log))
                 }
                 OutputInner::OtherStatic(child_log) => {
-                    max_child_level = log::LevelFilter::Trace;
+                    max_child_level = log::LevelFilter::Shell;
                     Some(log_impl::Output::OtherStatic(child_log))
                 }
             })
