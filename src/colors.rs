@@ -146,6 +146,14 @@ pub struct ColoredLevelConfig {
     ///
     /// [`Trace`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Trace
     pub trace: Color,
+    /// The color to color logs with the [`Detail`] level.
+    ///
+    /// [`Detail`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Detail
+    pub detail: Color,
+    /// The color to color logs with the [`Shell`] level.
+    ///
+    /// [`Shell`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Shell
+    pub shell: Color,
 }
 
 impl ColoredLevelConfig {
@@ -214,6 +222,28 @@ impl ColoredLevelConfig {
         self
     }
 
+    /// Overrides the [`Detail`] level color with the given color.
+    ///
+    /// The default color is [`Color::White`].
+    ///
+    /// [`Detail`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Detail
+    /// [`Color::White`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.White
+    pub fn detail(mut self, detail: Color) -> Self {
+        self.detail = detail;
+        self
+    }
+
+    /// Overrides the [`Shell`] level color with the given color.
+    ///
+    /// The default color is [`Color::White`].
+    ///
+    /// [`Shell`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Shell
+    /// [`Color::White`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.White
+    pub fn shell(mut self, shell: Color) -> Self {
+        self.shell = shell;
+        self
+    }
+
     /// Colors the given log level with the color in this configuration
     /// corresponding to it's level.
     ///
@@ -235,6 +265,8 @@ impl ColoredLevelConfig {
             Level::Info => self.info,
             Level::Debug => self.debug,
             Level::Trace => self.trace,
+            Level::Detail => self.detail,
+            Level::Shell => self.shell,
         }
     }
 }
@@ -247,12 +279,16 @@ impl Default for ColoredLevelConfig {
     /// - [`Info`] as [`Color::White`]
     /// - [`Debug`] as [`Color::White`]
     /// - [`Trace`] as [`Color::White`]
+    /// - [`Detail`] as [`Color::White`]
+    /// - [`Shell`] as [`Color::White`]
     ///
     /// [`Error`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Error
     /// [`Warn`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Warn
     /// [`Info`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Info
     /// [`Debug`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Debug
     /// [`Trace`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Trace
+    /// [`Detail`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Detail
+    /// [`Shell`]: https://docs.rs/log/0.4/log/enum.Level.html#variant.Shell
     /// [`Color::White`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.White
     /// [`Color::Yellow`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.Yellow
     /// [`Color::Red`]: https://docs.rs/colored/1/colored/enum.Color.html#variant.Red
@@ -263,6 +299,8 @@ impl Default for ColoredLevelConfig {
             debug: Color::White,
             info: Color::White,
             trace: Color::White,
+            detail: Color::White,
+            shell: Color::White,
         }
     }
 }
