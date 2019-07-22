@@ -275,6 +275,7 @@ impl ColoredLevelConfig {
     /// Retrieves the color that a log level should be colored as.
     pub fn get_color(&self, level: &Level) -> Color {
         match *level {
+            Level::None => self.output,
             Level::Output => self.output,
             Level::Error => self.error,
             Level::Warn => self.warn,
